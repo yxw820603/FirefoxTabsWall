@@ -67,12 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
             for (const tab of tabs) {
                 const url = tab.url;
 
-                console.log("table url:",url);
-                console.log("current extension url:",currentExtensionUrl);
-                console.log("======");
-
-                if (url.startsWith(currentExtensionUrl)) {
-                    console.log("!!!!!!!!!!!!!!!!!!!");
+                // 如果 tab 是被 pin 状态，或者 url 是当前的扩展页面，continue
+                if (tab.pinned || url.startsWith(currentExtensionUrl)) {
                     continue;
                 }
 

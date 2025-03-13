@@ -1,5 +1,4 @@
-// 在文件顶部添加数据库初始化代码
-browser.runtime.onInstalled.addListener(() => {
+function initializeDatabase() {
     const request = indexedDB.open('TabsWallDB', 1);
 
     request.onupgradeneeded = (event) => {
@@ -31,7 +30,13 @@ browser.runtime.onInstalled.addListener(() => {
     request.onerror = (event) => {
         console.error('Database initialization failed:', event.target.error);
     };
-});
+}
+
+// 监听插件安装和更新事件
+browser.runtime.onInstalled.addListener(initializeDatabase);
+
+// 监听浏览器启动事件
+browser.runtime.onStartup.addListener(initializeDatabase);
 
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === 'captureTabs' && message.tabId) {
