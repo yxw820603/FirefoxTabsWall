@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  "name": "My Firefox Extension",
+  "version": "1.0",
+  "description": "A simple Firefox extension to demonstrate features.",
+  "permissions": ["activeTab", "tabs", "storage", "scripting", "windows","<all_urls>"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_title": "Capture Tab"
+  },
+  "web_accessible_resources": ["capture.html"]
+}

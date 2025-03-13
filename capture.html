@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Capture Tab</title>
+    <script src="capture.js"></script>
+    <style>
+        /* 简单的样式，可根据需要调整 */
+        .group {
+            border: 1px solid #ccc;
+            margin: 10px;
+            padding: 10px;
+        }
+        .photo {
+            display: inline-block;
+            margin: 5px;
+        }
+        .photo img {
+            max-width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Capture Current Tab</h2>
+    <button id="captureBtn">Capture</button>
+    <br>
+    <img id="screenshot" style="margin-top: 10px; max-width: 100%;" />
+
+    <!-- 过滤输入框 -->
+    <input type="text" id="groupFilter" placeholder="Filter by group">
+    <input type="text" id="keywordFilter" placeholder="Filter by keyword">
+    <button id="applyFilter">Apply Filter</button>
+
+    <!-- 照片墙容器 -->
+    <div id="photoWall"></div>
+</body>
+</html>
