@@ -1,9 +1,15 @@
 {
   "manifest_version": 2,
-  "name": "My Firefox Extension",
+  "name": "MyTabsWall",
   "version": "1.0",
-  "description": "A simple Firefox extension to demonstrate features.",
-  "permissions": ["activeTab", "tabs", "storage", "scripting", "windows","<all_urls>"],
+  "icons": {
+    "16": "icon.png",
+    "32": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"  
+  },
+  "description": "A simple extension to demonstrate features.",
+  "permissions": ["activeTab", "tabs", "storage", "scripting","<all_urls>"],
   "background": {
     "scripts": ["background.js"],
     "persistent": false

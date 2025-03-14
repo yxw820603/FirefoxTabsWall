@@ -1,7 +1,7 @@
 function initializeDatabase() {
     const request = indexedDB.open('TabsWallDB', 1);
 
-    request.onupgradeneeded = (event) => {
+    function onUpgradeNeeded(event) {
         const db = event.target.result;
         // 创建第一个对象存储空间，包含 host, url, title, screenshot 字段
         if (!db.objectStoreNames.contains('tabInfo')) {
@@ -21,37 +21,56 @@ function initializeDatabase() {
             urlKeywordsStore.createIndex('url', 'url', { unique: true });
             urlKeywordsStore.createIndex('keywords', 'keywords', { unique: false });
         }
-    };
+    }
 
-    request.onsuccess = () => {
+    function onSuccess() {
         console.log('Database initialized successfully');
-    };
+    }
 
-    request.onerror = (event) => {
+    function onError(event) {
         console.error('Database initialization failed:', event.target.error);
-    };
+    }
+
+    request.onupgradeneeded = onUpgradeNeeded;
+    request.onsuccess = onSuccess;
+    request.onerror = onError;
 }
 
-// 监听插件安装和更新事件
-browser.runtime.onInstalled.addListener(initializeDatabase);
+function handleInstalled() {
+    initializeDatabase();
+}
 
-// 监听浏览器启动事件
-browser.runtime.onStartup.addListener(initializeDatabase);
+function handleStartup() {
+    initializeDatabase();
+}
 
-browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+function handleMessage(message, sender, sendResponse) {
     if (message.action === 'captureTabs' && message.tabId) {
-        browser.tabs.captureTab(message.tabId).then((dataUrl) => {
-            console.log('Screenshot captured:', dataUrl);
+        function captureSuccess(dataUrl) {
             sendResponse({ dataUrl: dataUrl });
-        }).catch((error) => {
+        }
+
+        function captureError(error) {
             console.error('Error capturing screenshot:', error);
-        });
+        }
+
+        browser.tabs.captureTab(message.tabId).then(captureSuccess).catch(captureError);
         return true; // Keep the message channel open for sendResponse
     }
-});
+}
 
-browser.browserAction.onClicked.addListener(() => {
+function handleBrowserActionClick() {
     browser.tabs.create({
         url: browser.runtime.getURL('capture.html')
     });
-});
+}
+
+// 监听插件安装和更新事件
+browser.runtime.onInstalled.addListener(handleInstalled);
+
+// 监听浏览器启动事件
+browser.runtime.onStartup.addListener(handleStartup);
+
+browser.runtime.onMessage.addListener(handleMessage);
+
+browser.browserAction.onClicked.addListener(handleBrowserActionClick);
